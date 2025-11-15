@@ -137,5 +137,3 @@ export async function initListeners() {
         initUserData(),
     ]);
 }
-
-

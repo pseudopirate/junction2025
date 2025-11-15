@@ -1,5 +1,5 @@
 import { Card } from "./ui/card";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Area, AreaChart } from "recharts";
+import { XAxis, YAxis, Tooltip, ResponsiveContainer, Area, AreaChart } from "recharts";
 
 const data = [
   { time: "Now", risk: 35 },

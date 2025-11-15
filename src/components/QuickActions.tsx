@@ -1,6 +1,6 @@
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
-import { Bell, BellOff, Pill, FileText, RefreshCw } from "lucide-react";
+import { Bell, BellOff, Pill, FileText } from "lucide-react";
 import { Badge } from "./ui/badge";
 
 interface QuickActionsProps {

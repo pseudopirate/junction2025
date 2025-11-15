@@ -1,5 +1,5 @@
 import { Card } from "./ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { TrendingUp, Moon, Smartphone, Calendar, Activity, Cloud } from "lucide-react";
 import { Badge } from "./ui/badge";
 
