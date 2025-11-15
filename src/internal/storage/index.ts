@@ -1,18 +1,41 @@
-/**
- * IndexedDB Storage Module
- * Provides CRUD operations for storing any JSON data in IndexedDB
- * 
- * IndexedDB Structure:
- * - Database: Top-level container (e.g., "PWA_DATA_STORAGE")
- * - Object Stores: Like tables/namespaces (e.g., "geolocation", "weather", "heartRate")
- * - Records: Individual items stored in each object store
- * - Indexes: For efficient querying (e.g., "createdAt", "updatedAt")
- * 
- * You can use different object stores (namespaces) to organize your data:
- * - storage.useStore('geolocation').create(...)
- * - storage.useStore('weather').create(...)
- * - storage.useStore('heartRate').create(...)
- */
+
+
+export interface GeoPosition {
+  accuracy: number
+  latitude: number
+  longitude: number
+  altitude: number | null
+  altitudeAccuracy: number | null
+  heading: number | null
+  speed: number | null
+  timestamp: number
+}
+
+export interface AccelerometerData {
+  x: number | null
+  y: number | null
+  z: number | null
+  alpha: number | null,
+  beta: number | null
+  gamma: number | null
+  interval: number | null
+}
+
+export interface GeneralData {
+  attacks_last_7_days: number;
+  attacks_last_30_days: number;
+  bright_light_exposure: number;
+  date: string;
+  days_since_last_attack: number;
+  hydration_low: number;
+  migraine_next_day: number;
+  pressure_drop: number;
+  prodrome_symptoms: number;
+  screen_time_hours: number;
+  skipped_meal: number;
+  sleep_hours: number;
+  stress_level: number;
+}
 
 type StoreName =
     | 'permissions'
