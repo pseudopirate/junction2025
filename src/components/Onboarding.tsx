@@ -43,9 +43,9 @@ export function Onboarding({ onComplete }: OnboardingProps) {
   // Welcome Step
   if (step === 'welcome') {
     return (
-      <div className="fixed inset-0 bg-background z-50 flex flex-col overflow-y-auto">
-        <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
-          <div className="w-full max-w-md space-y-8">
+      <div className="fixed inset-0 bg-background z-50 flex flex-col">
+        <div className="flex-1 overflow-y-auto min-h-0 px-6 py-12" style={{ WebkitOverflowScrolling: 'touch', paddingBottom: 'calc(env(safe-area-inset-bottom) + 120px)' } as CSSProperties}>
+          <div className="w-full max-w-md mx-auto space-y-8 pb-6">
             {/* Logo */}
             <div className="flex justify-center">
               <div className="p-6 rounded-3xl gradient-primary">
@@ -99,19 +99,26 @@ export function Onboarding({ onComplete }: OnboardingProps) {
                 </div>
               </div>
             </div>
+
+            {/* Spacer so last item can scroll above fixed footer */}
+            <div className="h-28" aria-hidden="true" />
           </div>
         </div>
 
         {/* Continue Button */}
-        <div className="p-6 border-t bg-background/95 backdrop-blur">
-          <Button
-            size="lg"
-            className="w-full h-14 text-base"
-            onClick={handleContinue}
-          >
-            Get Started
-            <ChevronRight className="w-5 h-5 ml-2" />
-          </Button>
+        {/* Continue Button - placed as a normal footer so flex layout height is respected */}
+        <div className="flex-none p-6 border-t bg-secondary/20 backdrop-blur relative">
+          <div className="pointer-events-none absolute inset-x-0 -top-6 h-6" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.06))' }} aria-hidden="true" />
+          <div className="max-w-md mx-auto">
+            <Button
+              size="lg"
+              className="w-full h-14 text-base"
+              onClick={handleContinue}
+            >
+              Get Started
+              <ChevronRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -124,26 +131,25 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
     return (
       <div className="fixed inset-0 bg-background z-50 flex flex-col">
-        {/* Header */}
-        <div className="px-6 pt-8 pb-6 border-b">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 rounded-xl gradient-primary">
-              <Sparkles className="w-5 h-5 text-white" />
-            </div>
-            <h2 className="text-2xl font-bold">Enable Notifications</h2>
-          </div>
-          <p className="text-muted-foreground">
-            Stay alerted to migraine predictions
-          </p>
-        </div>
+        {/* Header is now part of the scrollable content so it will scroll with the page */}
 
-        {/* Content */}
-        <div className="flex-1 px-6 py-6 min-h-0">
+        {/* Content - header moved inside this scrollable container so it scrolls with the content */}
+        <div className="flex-1 px-6 py-6 min-h-0 overflow-y-auto pr-2" style={{ WebkitOverflowScrolling: 'touch', paddingBottom: 'calc(env(safe-area-inset-bottom) + 220px)' } as CSSProperties}>
+          {/* Header (now scrollable) */}
+          <div className="px-6 pt-2 pb-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 rounded-xl gradient-primary">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold">Enable Notifications</h2>
+            </div>
+            <p className="text-muted-foreground">
+              Stay alerted to migraine predictions
+            </p>
+          </div>
+
           {/* Scrollable area with momentum scrolling on iOS and reserved bottom space so footer doesn't overlap */}
-          <div
-            className="h-full overflow-y-auto space-y-6 pr-2"
-            style={{ WebkitOverflowScrolling: 'touch', paddingBottom: 'calc(env(safe-area-inset-bottom) + 92px)' } as CSSProperties}
-          >
+          <div className="space-y-6 pb-6">
             {/* Single Permission Card */}
             <Card className="p-6 border-primary/20 bg-linear-to-br from-primary/5 to-primary/2">
               <div className="space-y-4">
@@ -181,11 +187,15 @@ export function Onboarding({ onComplete }: OnboardingProps) {
                 Notifications are essential to deliver timely migraine predictions. You can manage more detailed settings later.
               </p>
             </div>
+
+            {/* Spacer so last item can scroll above fixed footer */}
+            <div className="h-28" aria-hidden="true" />
           </div>
         </div>
 
-        {/* Button (fixed at bottom) */}
-        <div className="absolute left-0 right-0 bottom-0 p-6 border-t bg-background/95 backdrop-blur space-y-3">
+        {/* Button (footer) */}
+        <div className="absolute left-0 right-0 bottom-0 p-6 border-t bg-secondary/20 backdrop-blur space-y-3">
+          <div className="pointer-events-none absolute inset-x-0 -top-6 h-6" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.06))' }} aria-hidden="true" />
           <div className="max-w-md mx-auto">
             <Button
               size="lg"
@@ -224,22 +234,31 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
   // Ready Step
   return (
-    <div className="fixed inset-0 bg-background z-50 flex flex-col items-center justify-center px-6 overflow-y-auto">
-      <div className="w-full max-w-md space-y-8 text-center">
-        <div className="flex justify-center">
-          <div className="p-8 rounded-3xl bg-green-500/10">
-            <CheckCircle2 className="w-20 h-20 text-green-600" />
+    <div className="fixed inset-0 bg-background z-50 flex flex-col">
+      <div className="flex-1 overflow-y-auto min-h-0 px-6 py-12" style={{ WebkitOverflowScrolling: 'touch', paddingBottom: 'calc(env(safe-area-inset-bottom) + 220px)' } as CSSProperties}>
+        <div className="w-full max-w-md mx-auto space-y-8 text-center pb-6">
+          <div className="flex justify-center">
+            <div className="p-8 rounded-3xl bg-green-500/10">
+              <CheckCircle2 className="w-20 h-20 text-green-600" />
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-balance">You're All Set!</h2>
-          <p className="text-muted-foreground text-lg">
-            AuraSense is learning your patterns. Check back in 24 hours for your first prediction.
-          </p>
-        </div>
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-balance">You're All Set!</h2>
+            <p className="text-muted-foreground text-lg">
+              AuraSense is learning your patterns. Check back in 24 hours for your first prediction.
+            </p>
+          </div>
 
-        <div className="pt-4">
+          {/* Spacer so last item can scroll above fixed footer */}
+          <div className="h-28" aria-hidden="true" />
+        </div>
+      </div>
+
+      {/* Button (footer) */}
+      <div className="absolute left-0 right-0 bottom-0 p-6 border-t bg-secondary/20 backdrop-blur">
+        <div className="pointer-events-none absolute inset-x-0 -top-6 h-6" style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.06))' }} aria-hidden="true" />
+        <div className="max-w-md mx-auto">
           <Button
             size="lg"
             className="w-full h-14 text-base"
