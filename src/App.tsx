@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Activity, BarChart3, History, Settings, Brain, Home } from "lucide-react";
-import { RiskMeter } from "./components/RiskMeter";
+import { RiskMeter, PredictionMeta } from "./components/RiskMeter";
 import { PredictionTimeline } from "./components/PredictionTimeline";
 import { TriggerInsights } from "./components/TriggerInsights";
 import { DataSources } from "./components/DataSources";
@@ -23,8 +23,11 @@ function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
 
   // Prediction state
-  const [riskScore, setRiskScore] = useState<number | null>(null);
-  const [predictionMeta, setPredictionMeta] = useState<string | null>(null);
+
+  const [riskScorePercent, setRiskScorePercent] = useState<number | null>(null);
+  const [predictionMeta, setPredictionMeta] = useState<PredictionMeta>(null);
+
+
 
   useEffect(() => {
     // Check if onboarding is complete
@@ -48,9 +51,10 @@ function AppContent() {
         const latest = data[data.length - 1];
         const result = await predictMigraneRisk(latest);
         if (!mounted) return;
-        const scorePercent = Math.round((result.score ?? 0) * 100);
-        setRiskScore(scorePercent);
-        setPredictionMeta(result.meta?.explanation ?? null);
+        const rawScore = result.score ?? 0;
+        const scorePercent = Math.round(rawScore * 100);
+        setRiskScorePercent(scorePercent);
+        setPredictionMeta(result.meta ?? null);
       } catch (e) {
         console.error('Failed to initialize collectors or run prediction', e);
       }
@@ -82,7 +86,7 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Mobile Header */}
-      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -112,8 +116,8 @@ function AppContent() {
         {activeTab === "home" && (
           <div className="space-y-6">
             <RiskMeter
-              riskLevel={riskScore ?? 35}
-              nextPrediction={predictionMeta ?? "Peak risk expected around 9am tomorrow"}
+              riskLevel={riskScorePercent ?? 35}
+              predictionMeta={predictionMeta as PredictionMeta}
             />
 
             <PredictionTimeline />
@@ -155,7 +159,7 @@ function AppContent() {
       </main>
 
       {/* Bottom Navigation - Mobile */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="flex items-center justify-around px-2 py-2">
           <button
             onClick={() => setActiveTab("home")}

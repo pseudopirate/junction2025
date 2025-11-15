@@ -1,12 +1,39 @@
 import { AlertTriangle, CheckCircle2, AlertCircle } from "lucide-react";
 import { Card } from "./ui/card";
 
+export type Trend = {
+  feature: string;
+  current: number;
+  average: number;
+  trend: "increasing" | "decreasing" | "stable";
+  changePercent: number;
+};
+
+export type Feature = {
+  label: string;
+  value: number;
+  threshold: number;
+  direction: "left" | "right";
+  isAboveThreshold?: boolean;
+};
+
+export type PredictionMeta = {
+  explanation?: string | null;
+  detailedExplanation?: {
+    summary?: string;
+    keyFactors?: string[];
+    recommendations?: string[];
+    trends?: Trend[];
+  };
+  features?: Feature[];
+} | null;
+
 interface RiskMeterProps {
   riskLevel: number; // 0-100
-  nextPrediction?: string;
+  predictionMeta?: PredictionMeta;
 }
 
-export function RiskMeter({ riskLevel, nextPrediction }: RiskMeterProps) {
+export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
   const getRiskStatus = () => {
     if (riskLevel < 30) return { label: "Low Risk", color: "text-success", gradient: "gradient-risk-low", icon: CheckCircle2 };
     if (riskLevel < 70) return { label: "Moderate Risk", color: "text-warning", gradient: "gradient-risk-moderate", icon: AlertCircle };
@@ -78,10 +105,22 @@ export function RiskMeter({ riskLevel, nextPrediction }: RiskMeterProps) {
             <span>{status.label}</span>
           </div>
 
-          {nextPrediction && (
+          {/* Only show summary and recommendations to the user */}
+          { (predictionMeta?.detailedExplanation?.summary ?? predictionMeta?.explanation) && (
             <p className="text-muted-foreground mt-4">
-              {nextPrediction}
+              {predictionMeta?.detailedExplanation?.summary ?? predictionMeta?.explanation}
             </p>
+          )}
+
+          {predictionMeta?.detailedExplanation?.recommendations && predictionMeta.detailedExplanation.recommendations.length > 0 && (
+            <div className="mt-4 text-left mx-6">
+              <div className="text-sm font-medium">Recommendations</div>
+              <ul className="list-disc list-inside text-sm text-muted-foreground mt-2">
+                {predictionMeta.detailedExplanation.recommendations.slice(0, 5).map((r, i) => (
+                  <li key={i}>{r}</li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
       </div>
