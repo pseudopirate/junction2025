@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Activity, BarChart3, History, Settings, Brain, Home } from "lucide-react";
 import { RiskMeter } from "./components/RiskMeter";
 import { PredictionTimeline } from "./components/PredictionTimeline";
@@ -8,11 +8,17 @@ import { HistoryView } from "./components/HistoryView";
 import { QuickActions } from "./components/QuickActions";
 import { MobileOptimized } from "./components/MobileOptimized";
 import { Button } from "./components/ui/button";
-import { Badge } from "./components/ui/badge";
+import { ensurePermissions, initListeners } from "./internal/collectors";
 
 function App() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [activeTab, setActiveTab] = useState("home");
+  useEffect(() => {
+    (async () => {
+      await ensurePermissions();
+      await initListeners();
+    })()
+  }, []);
 
   return (
     <MobileOptimized>
