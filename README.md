@@ -175,8 +175,8 @@ MIT
 - **Use Cases**: Heart rate, step count, sleep data, workout metrics
 
 ## TODO
-- [ ] Integrate model (Igor)
-- [ ] Feed context from database (Igor)
+- [x] Integrate model (Igor)
+- [x] Feed context from database (Igor)
 - [ ] Decision maker: calls model, gets score and makes prediction (Aarni)
 - [ ] Explanaitions based on score (Aarni)
 - [ ] Come up with scenario (Slava)
