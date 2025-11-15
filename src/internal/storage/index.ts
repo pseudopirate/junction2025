@@ -17,11 +17,10 @@
 type StoreName = 'permissions' | 'geolocation' | 'weather' | 'heartRate' | 'general';
 
 const DB_NAME = 'PWA_DATA_STORAGE'
-const DB_VERSION = 1
 const DEFAULT_STORE_NAME = 'general'
 
 interface StoredItem<T = unknown> {
-  id: string
+  id: number
   data: T
   createdAt: number
   updatedAt: number
@@ -34,8 +33,43 @@ class IndexedDBStorage {
   private knownStores: Set<StoreName> = new Set([DEFAULT_STORE_NAME])
 
   /**
+   * Get the current database version and existing stores
+   */
+  private async getDatabaseInfo(): Promise<{ version: number; stores: DOMStringList }> {
+    return new Promise((resolve, reject) => {
+      // Open without version to check what exists
+      // If database doesn't exist, this will still succeed but we'll need to create it
+      const checkRequest = indexedDB.open(DB_NAME)
+      
+      checkRequest.onsuccess = () => {
+        const db = checkRequest.result
+        const version = db.version
+        const stores = db.objectStoreNames
+        db.close()
+        resolve({ version, stores })
+      }
+      
+      checkRequest.onerror = () => {
+        // If we can't open, assume it doesn't exist
+        // Return empty stores - we'll create them on first init
+        const emptyStores = {
+          contains: () => false,
+          length: 0,
+          item: () => null,
+          [Symbol.iterator]: function* () {}
+        } as unknown as DOMStringList
+        resolve({ version: 1, stores: emptyStores })
+      }
+      
+      checkRequest.onblocked = () => {
+        reject(new Error('Database is blocked by another connection'))
+      }
+    })
+  }
+
+  /**
    * Initialize the IndexedDB database
-   * @param storeNames Optional array of store names to create during initialization
+   * Opens without version first, then upgrades only if needed
    */
   private async init(storeNames?: StoreName[]): Promise<void> {
     if (this.db) {
@@ -51,8 +85,38 @@ class IndexedDBStorage {
       storeNames.forEach(name => this.knownStores.add(name))
     }
 
+    // First, check what exists in the database
+    const { version: existingVersion, stores: existingStores } = await this.getDatabaseInfo()
+    
+    // Check if all known stores already exist
+    const missingStores = Array.from(this.knownStores).filter(
+      storeName => !existingStores.contains(storeName)
+    )
+
+    // If all stores exist, just open without version
+    if (missingStores.length === 0) {
+      this.initPromise = new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME)
+
+        request.onerror = () => {
+          reject(new Error(`Failed to open database: ${request.error?.message}`))
+          this.initPromise = null
+        }
+
+        request.onsuccess = () => {
+          this.db = request.result
+          resolve()
+          this.initPromise = null
+        }
+      })
+      return this.initPromise
+    }
+
+    // Need to upgrade - increment version and create missing stores
+    const newVersion = existingVersion + 1
+
     this.initPromise = new Promise((resolve, reject) => {
-      const request = indexedDB.open(DB_NAME, DB_VERSION)
+      const request = indexedDB.open(DB_NAME, newVersion)
 
       request.onerror = () => {
         reject(new Error(`Failed to open database: ${request.error?.message}`))
@@ -68,8 +132,8 @@ class IndexedDBStorage {
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result
 
-        // Create all known stores if they don't exist
-        this.knownStores.forEach(storeName => {
+        // Create all missing stores
+        missingStores.forEach(storeName => {
           if (!db.objectStoreNames.contains(storeName)) {
             const objectStore = db.createObjectStore(storeName, { keyPath: 'id' })
             objectStore.createIndex('createdAt', 'createdAt', { unique: false })
@@ -86,21 +150,18 @@ class IndexedDBStorage {
    * Ensure a specific object store exists (creates it if needed)
    */
   private async ensureStore(storeName: StoreName): Promise<void> {
-    if (this.knownStores.has(storeName)) {
-      await this.init()
-      // Verify store actually exists
-      if (this.db && this.db.objectStoreNames.contains(storeName)) {
-        return
-      }
-    }
-
+    // Add to known stores
     this.knownStores.add(storeName)
-    
-    // If DB is already open, we need to close and reopen with higher version
-    const currentDb = this.db
-    if (currentDb) {
-      const currentVersion = currentDb.version
-      currentDb.close()
+
+    // If DB is already open, check if store exists
+    if (this.db) {
+      if (this.db.objectStoreNames.contains(storeName)) {
+        return // Store already exists
+      }
+      
+      // Store doesn't exist, need to upgrade
+      const currentVersion = this.db.version
+      this.db.close()
       this.db = null
       this.initPromise = null
 
@@ -126,7 +187,7 @@ class IndexedDBStorage {
         }
       })
     } else {
-      // DB not open yet, just initialize normally
+      // DB not open yet, just initialize normally (will create store if needed)
       await this.init()
     }
   }
@@ -181,7 +242,7 @@ class IndexedDBStorage {
    * @param data JSON data to store
    * @param storeName Optional store name (overrides current store)
    */
-  async create<T = unknown>(id: string, data: T, storeName?: StoreName): Promise<void> {
+  async create<T = unknown>(id: number, data: T, storeName?: StoreName): Promise<void> {
     const targetStore = storeName || this.currentStore
     const db = await this.ensureInit(targetStore)
     const now = Date.now()
@@ -216,7 +277,7 @@ class IndexedDBStorage {
    * @param data JSON data to store
    * @param storeName Optional store name (overrides current store)
    */
-  async upsert<T = unknown>(id: string, data: T, storeName?: StoreName): Promise<void> {
+  async upsert<T = unknown>(id: number, data: T, storeName?: StoreName): Promise<void> {
     const targetStore = storeName || this.currentStore
     const db = await this.ensureInit(targetStore)
     const now = Date.now()
@@ -249,7 +310,7 @@ class IndexedDBStorage {
    * @param storeName Optional store name (overrides current store)
    * @returns The stored item or null if not found
    */
-  async read<T = unknown>(id: string, storeName?: StoreName): Promise<StoredItem<T> | null> {
+  async read<T = unknown>(id: number, storeName?: StoreName): Promise<StoredItem<T> | null> {
     const targetStore = storeName || this.currentStore
     const db = await this.ensureInit(targetStore)
 
@@ -273,7 +334,7 @@ class IndexedDBStorage {
    * @param storeName Optional store name (overrides current store)
    * @returns The data field or null if not found
    */
-  async readData<T = unknown>(id: string, storeName?: StoreName): Promise<T | null> {
+  async readData<T = unknown>(id: number, storeName?: StoreName): Promise<T | null> {
     const item = await this.read<T>(id, storeName)
     return item ? item.data : null
   }
@@ -293,7 +354,9 @@ class IndexedDBStorage {
       const request = store.getAll()
 
       request.onsuccess = () => {
-        resolve(request.result || [])
+        const result = request.result || []
+        result.sort((a, b) => a.id - b.id)
+        resolve(result)
       }
       request.onerror = () => {
         reject(new Error(`Failed to read all items: ${request.error?.message}`))
@@ -317,7 +380,7 @@ class IndexedDBStorage {
    * @param data New JSON data (can be partial)
    * @param storeName Optional store name (overrides current store)
    */
-  async update<T = unknown>(id: string, data: Partial<T> | T, storeName?: StoreName): Promise<void> {
+  async update<T = unknown>(id: number, data: Partial<T> | T, storeName?: StoreName): Promise<void> {
     const targetStore = storeName || this.currentStore
     const db = await this.ensureInit(targetStore)
     const existing = await this.read<T>(id, targetStore)
@@ -349,7 +412,7 @@ class IndexedDBStorage {
    * @param id Unique identifier for the item
    * @param storeName Optional store name (overrides current store)
    */
-  async delete(id: string, storeName?: StoreName): Promise<void> {
+  async delete(id: number, storeName?: StoreName): Promise<void> {
     const targetStore = storeName || this.currentStore
     const db = await this.ensureInit(targetStore)
 
@@ -414,7 +477,7 @@ class IndexedDBStorage {
    * @param storeName Optional store name (overrides current store)
    * @returns True if item exists, false otherwise
    */
-  async exists(id: string, storeName?: StoreName): Promise<boolean> {
+  async exists(id: number, storeName?: StoreName): Promise<boolean> {
     const item = await this.read(id, storeName)
     return item !== null
   }
