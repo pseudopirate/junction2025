@@ -1,186 +1,119 @@
-# Junction 2025 PWA
+# AuraSense
+## Junction 2025 Aava-Pfizer Migraine Prediction App
 
-A Progressive Web App built with React, TypeScript, and Vite.
+[Open application](https://junction2025-bice.vercel.app/)
 
-## Features
 
-- ⚡️ Vite for fast development and building
-- ⚛️ React 18 with TypeScript
-- 📱 PWA support with service worker
-- 🔥 Hot Module Replacement (HMR)
-- 🚀 Optimized for Vercel deployment
+## AuraSense — Personal AI Agent for Migraine Prediction
 
-## Getting Started
+AuraSense is a fully private, on-device AI agent designed to predict migraines before symptoms appear. Instead of logging data after the fact, it identifies meaningful patterns, explains why risk changes, and guides users with actionable steps — all without sending any personal information to the cloud.
 
-### Prerequisites
+## The Problem
 
-- Node.js 18+ and npm
+Migraines are caused by many overlapping factors: sleep patterns, stress levels, light exposure, food, weather, hormones, and lifestyle.
+What triggers one person may have zero effect on another. Despite this, most migraine apps today fail to help users predict anything.
 
-### Installation
+Current tools only log symptoms. They treat all users the same, show charts without explanations, and never reveal what might happen next. Without a real forecast, people can only react when pain has already started.
 
-```bash
-npm install
-```
+## What We Built
 
-### Development
+AuraSense is not a static model — it is a personal AI agent that adapts to each individual.
 
-Start the development server with watch mode:
+### Personal AI Agent
 
-```bash
-npm run dev
-```
+It behaves like a dedicated assistant, learning unique combinations of triggers and personal patterns that shape each user’s migraine profile.
 
-The app will be available at `http://localhost:5173`
+### Predicts in Advance
 
-### Build
+The agent forecasts migraine risk before the first symptoms appear, giving users time to prepare, adjust behavior, or prevent an attack entirely.
 
-Build for production:
+### Runs Locally, Fully Private
 
-```bash
-npm run build
-```
+All computation happens directly on the user’s device using pure JavaScript.
+No servers. No cloud. No TensorFlow.
+Personal health data never leaves the device — users keep complete control and privacy.
 
-The production build will be in the `dist` directory.
+## Architecture
 
-### Preview
-
-Preview the production build locally:
-
-```bash
-npm run preview
-```
-
-## Deployment to Vercel
-
-1. Push your code to a Git repository (GitHub, GitLab, or Bitbucket)
-
-2. Import your project in [Vercel](https://vercel.com)
-
-3. Vercel will automatically detect the Vite framework and use the configuration from `vercel.json`
-
-4. Your app will be deployed and available at a Vercel URL
-
-Alternatively, you can use the Vercel CLI:
-
-```bash
-npm i -g vercel
-vercel
-```
-
-## PWA Features
-
-This app includes:
-- Service worker for offline support
-- Web app manifest
-- Auto-update capability
-- Installable on mobile devices and desktop
-- Install prompt component for better UX
-
-## Mobile Installation
-
-### Android/Chrome
-
-1. Open the app in Chrome browser
-2. Look for the install prompt that appears automatically, or
-3. Tap the menu (three dots) → "Install app" or "Add to Home screen"
-4. Confirm installation
-
-### iOS/Safari
-
-1. Open the app in Safari browser
-2. Tap the Share button (square with arrow)
-3. Scroll down and tap "Add to Home Screen"
-4. Customize the name if desired
-5. Tap "Add" to confirm
-
-The app will appear on your home screen and can be launched like a native app.
-
-## PWA Icons
-
-For the best installation experience, add the following icon files to the `public` folder:
-
-- `pwa-64x64.png` (64x64 pixels)
-- `pwa-192x192.png` (192x192 pixels)
-- `pwa-512x512.png` (512x512 pixels)
-- `maskable-icon-512x512.png` (512x512 pixels, maskable - safe zone: 80% center)
-- `apple-touch-icon.png` (180x180 pixels for iOS)
-
-If icons are not provided, the PWA plugin will generate placeholder icons during build, but it's recommended to add your own branded icons.
-
-## Project Structure
+AuraSense uses an interpretable decision tree built on 12 personalized parameters.
 
 ```
-junction2025/
-├── public/          # Static assets (icons go here)
-├── src/
-│   ├── components/  # React components
-│   │   └── InstallPrompt.tsx  # Install prompt component
-│   ├── App.tsx      # Main app component
-│   ├── App.css      # App styles
-│   ├── main.tsx     # Entry point
-│   └── index.css    # Global styles
-├── index.html       # HTML template
-├── vite.config.ts   # Vite configuration
-├── tsconfig.json    # TypeScript configuration
-└── vercel.json      # Vercel deployment configuration
+Inputs → Decision Tree → Risk & Suggested Actions
 ```
 
-## License
+Because the system is entirely local and transparent, users can clearly understand why predictions are made and what factors influence them.
 
-MIT
+## Daily Inputs
 
+AuraSense combines multiple data sources to build a complete picture of migraine risk:
 
-## Data collection capabilities
+### Automatic inputs:
+* Wearable data (sleep, stress, HRV)
+* Phone usage and screen patterns
+* Weather and geolocation
+* Calendar context
+* Connected health data apps (Apple Health, etc.)
 
-### 1. **Geolocation API** ✅
-- **What**: GPS coordinates (latitude, longitude), altitude, accuracy, heading, speed
-- **Permission**: Required (user must grant)
-- **API**: `navigator.geolocation`
-- **Use Cases**: Location tracking, route mapping, location-based services
-- **Limitations**: 
-  - Requires HTTPS (or localhost)
-  - User must grant permission
-  - Battery intensive for continuous tracking
+### Manual inputs:
+Simple one-tap logging for food triggers, sensory overload, caffeine, alcohol, exercise, or low-FPS gaming.
 
-### 2. **Weather Data** ✅
-- **What**: Current weather, forecasts, air quality
-- **How**: External APIs (OpenWeatherMap, WeatherAPI, etc.)
-- **Requirements**: API key, user's location (from Geolocation API)
-- **Note**: Not directly from device, but can be fetched based on location
+All of this is compared against the user’s personal history, revealing context-dependent patterns invisible to generic models.
 
+## Prediction Result
 
-### 3. **Accelerometer** ✅
-- **What**: Device acceleration in X, Y, Z axes
-- **API**: `DeviceMotionEvent` or Generic Sensor API
-- **Permission**: May require (iOS requires user gesture)
-- **Use Cases**: Motion detection, step counting, shake detection, orientation
+AuraSense presents clear outcomes:
 
-### 4. **Gyroscope** ✅
-- **What**: Angular velocity/rotation rate
-- **API**: `DeviceMotionEvent` or Generic Sensor API
-- **Permission**: May require
-- **Use Cases**: 3D orientation, gaming, VR/AR
+MIGRAINE RISK — HIGH⚠️
 
-### 5. **Magnetometer (Compass)** ✅
-- **What**: Magnetic field strength, compass heading
-- **API**: `DeviceOrientationEvent`
-- **Permission**: May require
-- **Use Cases**: Compass apps, navigation
+MIGRAINE RISK — MODERATE
 
-### 6. **Web Bluetooth API** WIP
-- **What**: Connect to Bluetooth Low Energy (BLE) devices
-- **Devices**: Heart rate monitors, fitness trackers, smartwatches, blood pressure monitors
-- **Permission**: Required
-- **Browser Support**: Chrome/Edge (Android, Windows, Mac, Linux), not iOS Safari
-- **Use Cases**: Heart rate, step count, sleep data, workout metrics
+But the agent doesn’t stop at a number — it suggests concrete actions: hydration, reduced light exposure, breaks, rest planning, or medication reminders (if enabled).
+
+## Why This Risk?
+
+Every prediction is explained. The agent highlights the factors contributing to the current state, such as:
+* low sleep,
+* high stress,
+* bright light exposure,
+* prodrome signals,
+* environmental or behavioral changes.
+
+Both High Risk and Moderate Risk views include a transparent list of key drivers so users always understand why something is happening.
+
+## Risk History & Trends
+
+AuraSense tracks long-term trends, showing how risk evolves over days and weeks. It is aware of context, patterns, and personal cycles — enabling deeper insight than simple charts.
+
+## Not a Model. An Agent.
+
+AuraSense contains several layers:
+
+### Decision Layer
+
+Chooses how to act: when to warn, what to recommend, and how strongly to respond.
+
+### Explanation Layer
+
+Shows precisely why risk changed and which signals influenced the outcome.
+
+### Context Layer
+
+Understands the user’s environment — calendar events, weather, routines — and adapts predictions accordingly.
+
+### Local & Private Architecture
+
+Everything runs on-device. No data leaves the user’s phone. Privacy is absolute.
+
+AuraSense transforms migraine management from passive tracking into proactive personal guidance. It forecasts, explains, and acts — helping users stay one step ahead of their migraines with complete privacy and clarity.
+
 
 ## TODO
-- [ ] Integrate model (Igor)
-- [ ] Feed context from database (Igor)
+- [x] Integrate model (Igor)
+- [x] Feed context from database (Igor)
 - [ ] Decision maker: calls model, gets score and makes prediction (Aarni)
 - [ ] Explanaitions based on score (Aarni)
-- [ ] Come up with scenario (Slava)
-- [ ] Make presentation (Slava)
-- [ ] Create video
-- [ ] Fill hackathon.app
-- [ ] SUBMIT!
+- [X] Come up with scenario (Slava)
+- [X] Make presentation (Slava)
+- [ ] Create video (Slava)
+- [ ] Fill hackathon.app (Igor)
+- [ ] SUBMIT! (Igor)

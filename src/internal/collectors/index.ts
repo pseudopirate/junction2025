@@ -1,5 +1,7 @@
 import { type AccelerometerData, type GeoPosition, storage } from "../storage";
 import { data as csvData } from "./mock.data";
+import { initCalendar } from "./calendar";
+import { initWearables } from "./wearables";
 
 
 export async function ensurePermissions() {
@@ -55,7 +57,7 @@ async function initGeo() {
 }
 
 async function fetchWeather() {
-    const API_KEY = '55b5742fa01c2f15048e8b5fe33e69cf'
+    const API_KEY = ''
 
     const geo = await storage.readAll<GeoPosition>('geolocation');
     const first = geo[0];
@@ -69,7 +71,6 @@ async function fetchWeather() {
     if (!response.ok) throw new Error('Weather API error')
 
     const data = await response.json()
-    console.log('weather', data);
     await storage.upsert(Date.now(), data, 'weather');
 }
 
@@ -115,10 +116,9 @@ async function initUserData(): Promise<Record<string, string | number>[]> {
 }
 
 async function initWeather() {
-    fetchWeather();
     setInterval(async () => {
         fetchWeather();
-    }, 1000 * 60 * 5); // 5 min
+    }, 1000 * 60 * 30); // 30 min
 }
 
 async function initAccelerometer() {
@@ -142,5 +142,7 @@ export async function initListeners() {
         initWeather(),
         initUserData(),
         initAccelerometer(),
+        initCalendar(),
+        initWearables(),
     ]);
 }

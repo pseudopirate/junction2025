@@ -248,6 +248,7 @@ function generateExplanation(
 
     for (const feature of problematicFeatures) {
         if (feature.label === 'sleep_hours') {
+            if (!recommendations.some((t) => t.includes('sleep per night'))) 
             recommendations.push(`Aim for at least ${feature.threshold.toFixed(1)} hours of sleep per night`);
         } else if (feature.label === 'screen_time_hours') {
             recommendations.push(`Reduce screen time to below ${feature.threshold.toFixed(1)} hours per day`);
