@@ -44,7 +44,8 @@ type StoreName =
     | 'heartRate'
     | 'general'
     | 'accelerometer'
-    | 'gyroscope';
+    | 'gyroscope'
+    | 'migraines';
 
 const DB_NAME = 'PWA_DATA_STORAGE'
 const DEFAULT_STORE_NAME = 'general'
@@ -60,7 +61,8 @@ class IndexedDBStorage {
   private db: IDBDatabase | null = null
   private initPromise: Promise<void> | null = null
   private currentStore: StoreName = DEFAULT_STORE_NAME
-  private knownStores: Set<StoreName> = new Set([DEFAULT_STORE_NAME])
+  // Ensure the migraines store exists by default so UI can log attacks immediately
+  private knownStores: Set<StoreName> = new Set([DEFAULT_STORE_NAME, 'migraines'])
 
   /**
    * Get the current database version and existing stores

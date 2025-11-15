@@ -1,7 +1,8 @@
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
-import { Bell, BellOff, Pill, FileText } from "lucide-react";
+import { Bell, BellOff, FileText } from "lucide-react";
 import { Badge } from "./ui/badge";
+
 
 interface QuickActionsProps {
   notificationsEnabled: boolean;
@@ -47,16 +48,7 @@ export function QuickActions({ notificationsEnabled, onToggleNotifications }: Qu
           </div>
         </Button>
 
-        {/* Log Medication */}
-        <Button variant="outline" className="w-full justify-start h-auto p-4 active:scale-98 transition-transform">
-          <div className="flex items-center gap-3 flex-1">
-            <Pill className="w-5 h-5 text-primary" />
-            <div className="flex-1 text-left">
-              <div className="mb-1">Log Medication</div>
-              <div className="text-muted-foreground">Track treatment</div>
-            </div>
-          </div>
-        </Button>
+
 
         {/* Export Report */}
         <Button variant="outline" className="w-full justify-start h-auto p-4 active:scale-98 transition-transform">

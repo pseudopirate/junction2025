@@ -43,7 +43,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
   // Welcome Step
   if (step === 'welcome') {
     return (
-      <div className="fixed inset-0 bg-background z-50 flex flex-col">
+      <div className="fixed inset-0 bg-background z-50 flex flex-col overflow-y-auto">
         <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
           <div className="w-full max-w-md space-y-8">
             {/* Logo */}
@@ -138,75 +138,85 @@ export function Onboarding({ onComplete }: OnboardingProps) {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto px-6 py-8 space-y-6">
-          {/* Single Permission Card */}
-          <Card className="p-6 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/2">
-            <div className="space-y-4">
-              <div className="flex items-start gap-4">
-                <div className={`p-3 rounded-lg shrink-0 ${
-                  isNotifGranted ? 'bg-green-500/10' : 'bg-primary/10'
-                }`}>
-                  {isNotifGranted ? (
-                    <CheckCircle2 className="w-6 h-6 text-green-600" />
-                  ) : (
-                    <Bell className="w-6 h-6 text-primary" />
-                  )}
+        <div className="flex-1 px-6 py-6 min-h-0">
+          {/* Scrollable area with momentum scrolling on iOS and reserved bottom space so footer doesn't overlap */}
+          <div
+            className="h-full overflow-y-auto space-y-6 pr-2"
+            style={{ WebkitOverflowScrolling: 'touch' as any, paddingBottom: 'calc(env(safe-area-inset-bottom) + 92px)' }}
+          >
+            {/* Single Permission Card */}
+            <Card className="p-6 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/2">
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className={`p-3 rounded-lg shrink-0 ${
+                    isNotifGranted ? 'bg-green-500/10' : 'bg-primary/10'
+                  }`}>
+                    {isNotifGranted ? (
+                      <CheckCircle2 className="w-6 h-6 text-green-600" />
+                    ) : (
+                      <Bell className="w-6 h-6 text-primary" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-lg">Proactive Alerts</h3>
+                    <p className="text-muted-foreground mt-1">
+                      Get notified 24 hours before potential migraine episodes so you can prepare
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg">Proactive Alerts</h3>
-                  <p className="text-muted-foreground mt-1">
-                    Get notified 24 hours before potential migraine episodes so you can prepare
-                  </p>
-                </div>
+
+                {isNotifGranted && (
+                  <div className="flex items-center gap-2 text-green-600 text-sm bg-green-50 dark:bg-green-950/20 px-3 py-2 rounded-lg">
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span className="font-medium">Enabled</span>
+                  </div>
+                )}
               </div>
+            </Card>
 
-              {isNotifGranted && (
-                <div className="flex items-center gap-2 text-green-600 text-sm bg-green-50 dark:bg-green-950/20 px-3 py-2 rounded-lg">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span className="font-medium">Enabled</span>
-                </div>
-              )}
+            {/* Info Box */}
+            <div className="p-4 rounded-lg bg-muted/50 border space-y-2">
+              <p className="text-sm font-medium text-foreground">Why this matters:</p>
+              <p className="text-muted-foreground text-sm">
+                Notifications are essential to deliver timely migraine predictions. You can manage more detailed settings later.
+              </p>
             </div>
-          </Card>
-
-          {/* Info Box */}
-          <div className="p-4 rounded-lg bg-muted/50 border space-y-2">
-            <p className="text-sm font-medium text-foreground">Why this matters:</p>
-            <p className="text-muted-foreground text-sm">
-              Notifications are essential to deliver timely migraine predictions. You can manage more detailed settings later.
-            </p>
           </div>
         </div>
 
-        {/* Button */}
-        <div className="p-6 border-t bg-background/95 backdrop-blur space-y-3">
-          <Button
-            size="lg"
-            className="w-full h-14 text-base font-medium"
-            onClick={async () => {
-              await handleEnableAllPermissions();
-              handleContinue();
-            }}
-            disabled={isRequesting || isNotifGranted}
-            aria-busy={isRequesting}
-          >
-            {isRequesting && (
-              <div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin mr-2" />
-            )}
-            {isNotifGranted ? 'Notifications Enabled' : 'Enable Notifications'}
-          </Button>
-
-          {!isNotifGranted && (
+        {/* Button (fixed at bottom) */}
+        <div className="absolute left-0 right-0 bottom-0 p-6 border-t bg-background/95 backdrop-blur space-y-3">
+          <div className="max-w-md mx-auto">
             <Button
-              variant="outline"
               size="lg"
-              className="w-full h-12"
-              onClick={handleContinue}
-              disabled={isRequesting}
+              className="w-full h-14 text-base font-medium"
+              onClick={async () => {
+                await handleEnableAllPermissions();
+                handleContinue();
+              }}
+              disabled={isRequesting || isNotifGranted}
+              aria-busy={isRequesting}
             >
-              Maybe Later
+              {isRequesting && (
+                <div className="w-4 h-4 rounded-full border-2 border-current border-t-transparent animate-spin mr-2" />
+              )}
+              {isNotifGranted ? 'Notifications Enabled' : 'Enable Notifications'}
             </Button>
-          )}
+
+            {!isNotifGranted && (
+              <div className="mt-3">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full h-12"
+                  onClick={handleContinue}
+                  disabled={isRequesting}
+                >
+                  Maybe Later
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -214,7 +224,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
   // Ready Step
   return (
-    <div className="fixed inset-0 bg-background z-50 flex flex-col items-center justify-center px-6">
+    <div className="fixed inset-0 bg-background z-50 flex flex-col items-center justify-center px-6 overflow-y-auto">
       <div className="w-full max-w-md space-y-8 text-center">
         <div className="flex justify-center">
           <div className="p-8 rounded-3xl bg-green-500/10">
