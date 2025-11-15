@@ -18,9 +18,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: 'Junction 2025 PWA',
-        short_name: 'Junction2025',
-        description: 'Progressive Web App for Junction 2025',
+        name: 'AuraSense',
+        short_name: 'AuraSense',
+        description: 'Your personal AI that predicts migraines before they strike and guides you to avoid them',
         theme_color: '#ffffff',
         background_color: '#ffffff',
         display: 'standalone',
