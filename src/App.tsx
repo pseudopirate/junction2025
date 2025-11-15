@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Activity, BarChart3, History, Settings, Brain, Home } from "lucide-react";
+import { Analytics } from '@vercel/analytics/react';
 import { RiskMeter, PredictionMeta } from "./components/RiskMeter";
 import { PredictionTimeline } from "./components/PredictionTimeline";
 import { TriggerInsights } from "./components/TriggerInsights";
@@ -86,7 +87,7 @@ function AppContent() {
 
       const data = await Promise.all(dates.map((t) => storage.readData<GeneralData>(t, 'general')));
       if (!mounted) return;
-      
+
       let i = 0;
       // eslint-disable-next-line no-constant-condition
       while (true) {
@@ -101,7 +102,7 @@ function AppContent() {
         setRiskScorePercent(score);
         setPredictionMeta(result.meta);
         i++;
-        
+
         if (i >= data.length) i = 0
         await sleep(10000);
       }
@@ -293,6 +294,7 @@ function App() {
       <MobileOptimized>
         <AppContent />
       </MobileOptimized>
+      <Analytics />
     </PermissionsProvider>
   );
 }
