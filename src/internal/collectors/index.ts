@@ -67,7 +67,7 @@ async function fetchWeather() {
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
     const response = await fetch(url)
     if (!response.ok) throw new Error('Weather API error')
-    
+
     const data = await response.json()
     console.log('weather', data);
     await storage.upsert(Date.now(), data, 'weather');
@@ -79,15 +79,15 @@ async function initUserData(): Promise<Record<string, string | number>[]> {
     if (lines.length < 2) {
         return []; // Need at least header + one data row
     }
-    
+
     // Extract headers from first line
     const headers = lines[0].split(',').map(h => h.trim());
-    
+
     // Parse data rows
     const objects = lines.slice(1).map((line) => {
         const values = line.split(',');
         const obj: Record<string, string | number> = {};
-        
+
         headers.forEach((header, i) => {
             const value = values[i]?.trim() || '';
             // Try to convert to number if possible
@@ -98,10 +98,10 @@ async function initUserData(): Promise<Record<string, string | number>[]> {
                 obj[header] = value;
             }
         });
-        
+
         return obj;
     });
-    
+
     // Store parsed data in storage
     for (const obj of objects) {
         if (obj.date) {
@@ -110,7 +110,7 @@ async function initUserData(): Promise<Record<string, string | number>[]> {
             await storage.upsert(timestamp, obj, 'general');
         }
     }
-    
+
     return objects;
 }
 
