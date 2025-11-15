@@ -14,7 +14,14 @@
  * - storage.useStore('heartRate').create(...)
  */
 
-type StoreName = 'permissions' | 'geolocation' | 'weather' | 'heartRate' | 'general';
+type StoreName =
+    | 'permissions'
+    | 'geolocation'
+    | 'weather'
+    | 'heartRate'
+    | 'general'
+    | 'accelerometer'
+    | 'gyroscope';
 
 const DB_NAME = 'PWA_DATA_STORAGE'
 const DEFAULT_STORE_NAME = 'general'
