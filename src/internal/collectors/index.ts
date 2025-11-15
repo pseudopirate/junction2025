@@ -47,10 +47,14 @@ async function fetchWeather(lat: number, lon: number) {
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
     const response = await fetch(url)
     if (!response.ok) throw new Error('Weather API error')
-    
-    const data = await response.json()
+
+    return "test xd"
+
+    // const data = await response.json()
     // await storage.upsert('weather', data, 'weather');
 }
+
+console.log('fetchWeather', fetchWeather)
 
 async function initWeather() {
     setInterval(async () => {
@@ -65,5 +69,3 @@ export async function initListeners() {
         initWeather(),
     ]);
 }
-
-
