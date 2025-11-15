@@ -129,3 +129,47 @@ junction2025/
 
 MIT
 
+
+## Data collection capabilities
+
+### 1. **Geolocation API** ✅
+- **What**: GPS coordinates (latitude, longitude), altitude, accuracy, heading, speed
+- **Permission**: Required (user must grant)
+- **API**: `navigator.geolocation`
+- **Use Cases**: Location tracking, route mapping, location-based services
+- **Limitations**: 
+  - Requires HTTPS (or localhost)
+  - User must grant permission
+  - Battery intensive for continuous tracking
+
+### 2. **Weather Data** ✅
+- **What**: Current weather, forecasts, air quality
+- **How**: External APIs (OpenWeatherMap, WeatherAPI, etc.)
+- **Requirements**: API key, user's location (from Geolocation API)
+- **Note**: Not directly from device, but can be fetched based on location
+
+
+### 3. **Accelerometer** ✅
+- **What**: Device acceleration in X, Y, Z axes
+- **API**: `DeviceMotionEvent` or Generic Sensor API
+- **Permission**: May require (iOS requires user gesture)
+- **Use Cases**: Motion detection, step counting, shake detection, orientation
+
+### 4. **Gyroscope** ✅
+- **What**: Angular velocity/rotation rate
+- **API**: `DeviceMotionEvent` or Generic Sensor API
+- **Permission**: May require
+- **Use Cases**: 3D orientation, gaming, VR/AR
+
+### 5. **Magnetometer (Compass)** ✅
+- **What**: Magnetic field strength, compass heading
+- **API**: `DeviceOrientationEvent`
+- **Permission**: May require
+- **Use Cases**: Compass apps, navigation
+
+### 6. **Web Bluetooth API** WIP
+- **What**: Connect to Bluetooth Low Energy (BLE) devices
+- **Devices**: Heart rate monitors, fitness trackers, smartwatches, blood pressure monitors
+- **Permission**: Required
+- **Browser Support**: Chrome/Edge (Android, Windows, Mac, Linux), not iOS Safari
+- **Use Cases**: Heart rate, step count, sleep data, workout metrics

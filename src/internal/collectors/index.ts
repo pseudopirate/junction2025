@@ -1,6 +1,28 @@
 import { storage } from "../storage";
 import { data as csvData } from "./mock.data";
 
+
+
+interface GeoPosition {
+    accuracy: number
+    latitude: number
+    longitude: number
+    altitude: number | null
+    altitudeAccuracy: number | null
+    heading: number | null
+    speed: number | null
+    timestamp: number
+}
+
+interface AccelerometerData {
+    x: number | null
+    y: number | null
+    z: number | null
+    alpha: number | null,
+    beta: number | null
+    gamma: number | null
+    interval: number | null
+}
 export async function ensurePermissions() {
     const perms: Record<string, string> = {}
     // Check geolocation permission
@@ -26,16 +48,6 @@ export async function ensurePermissions() {
     await storage.upsert(1, perms, 'permissions')
 }
 
-interface GeoPosition {
-    accuracy: number
-    latitude: number
-    longitude: number
-    altitude: number | null
-    altitudeAccuracy: number | null
-    heading: number | null
-    speed: number | null
-    timestamp: number
-}
 async function initGeo() {
     navigator.geolocation.watchPosition(
         ({ coords, timestamp }) => {
@@ -130,10 +142,26 @@ async function initWeather() {
     }, 1000 * 60 * 5); // 5 min
 }
 
+async function initAccelerometer() {
+    window.addEventListener('devicemotion', (event) => {
+        const acc: AccelerometerData = {
+            x: event.acceleration ? event.acceleration.x : null,
+            y: event.acceleration ? event.acceleration.y : null,
+            z: event.acceleration ? event.acceleration.z : null,
+            alpha: event.rotationRate ? event.rotationRate.alpha : null,
+            beta: event.rotationRate ? event.rotationRate.beta : null,
+            gamma: event.rotationRate ? event.rotationRate.gamma : null,
+            interval: event.interval ? event.interval : null,
+        }
+        storage.upsert(Date.now(), acc, 'accelerometer');
+      });
+}
+
 export async function initListeners() {
     await Promise.all([
         initGeo(),
         initWeather(),
         initUserData(),
+        initAccelerometer(),
     ]);
 }
