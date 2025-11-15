@@ -1,8 +1,7 @@
-import { AlertTriangle, CheckCircle2, AlertCircle, Moon, Smartphone, Coffee, ChevronDown, ChevronUp } from "lucide-react"; // ADDED: Moon, Smartphone, Coffee, ChevronDown, ChevronUp for recommendations
+import { AlertTriangle, CheckCircle2, AlertCircle, Moon, Smartphone, Coffee, ChevronDown, ChevronUp } from "lucide-react";
 import { Card } from "./ui/card";
-import { Checkbox } from "./ui/checkbox"; // ADDED: For interactive recommendations
-import { Badge } from "./ui/badge"; // ADDED: For priority indicators
-import { useState } from "react"; // ADDED: For managing checkbox and expand state
+import { Badge } from "./ui/badge";
+import { useState } from "react";
 
 export type Trend = {
   feature: string;
@@ -37,7 +36,6 @@ interface RiskMeterProps {
   predictionMeta?: PredictionMeta;
 }
 
-// ADDED: New interface for enhanced recommendations
 interface EnhancedRecommendation {
   id: string;
   icon: React.ReactNode;
@@ -134,19 +132,16 @@ function computeTopDrivers(features: Feature[] = [], trends: Trend[] = []): Driv
   return drivers.slice(0, 3);
 }
 
-// ADDED: Helper function to map recommendations to enhanced format with icons and metadata
 function enrichRecommendations(
   recommendations: string[],
   topDrivers: Driver[]
 ): EnhancedRecommendation[] {
   return recommendations.map((rec, index) => {
-    // Try to match recommendation with a driver
     let linkedDriver = "Overall health";
     let icon = <CheckCircle2 className="w-5 h-5" />;
     let priority: "high" | "medium" = "medium";
     let expandedTips: string[] = [];
 
-    // Match keywords to determine icon and linked driver
     const lowerRec = rec.toLowerCase();
 
     if (lowerRec.includes("sleep")) {
@@ -197,8 +192,6 @@ function enrichRecommendations(
 }
 
 export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
-  // ADDED: State for managing completed recommendations and expanded items
-  const [completedRecs, setCompletedRecs] = useState<Set<string>>(new Set());
   const [expandedRecId, setExpandedRecId] = useState<string | null>(null);
 
   const getRiskStatus = () => {
@@ -217,29 +210,16 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
 
   const humanLabel = (label: string) => HUMAN_LABELS[label] ?? label.replace(/_/g, " ");
 
-  // ADDED: Toggle functions for interactivity
-  const toggleComplete = (id: string) => {
-    const newCompleted = new Set(completedRecs);
-    if (newCompleted.has(id)) {
-      newCompleted.delete(id);
-    } else {
-      newCompleted.add(id);
-    }
-    setCompletedRecs(newCompleted);
-  };
-
   const toggleExpand = (id: string) => {
     setExpandedRecId(expandedRecId === id ? null : id);
   };
 
-  // ADDED: Helper for priority badge colors
   const getPriorityColor = (priority: "high" | "medium") => {
     return priority === "high"
       ? "bg-purple-100 text-purple-700 border-purple-200"
       : "bg-blue-100 text-blue-700 border-blue-200";
   };
 
-  // ADDED: Enrich recommendations if they exist
   const rawRecommendations = predictionMeta?.detailedExplanation?.recommendations ?? [];
   const enhancedRecommendations = rawRecommendations.length > 0
     ? enrichRecommendations(rawRecommendations, topDrivers)
@@ -247,7 +227,6 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
 
   return (
     <Card className="p-6 relative overflow-hidden">
-      {/* Background gradient effect */}
       <div className={`absolute inset-0 opacity-5 ${status.gradient}`} />
 
       <div className="relative">
@@ -268,7 +247,6 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
           </div>
         </div>
 
-        {/* Top drivers section */}
         {topDrivers.length > 0 && (
           <div className="mt-6 mx-1">
             <div className="flex items-center justify-between mb-3">
@@ -302,12 +280,9 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
           </div>
         )}
 
-        {/* ENHANCED: Recommendations section with new design */}
         {enhancedRecommendations.length > 0 && (
           <div className="mt-6">
-            {/* CHANGED: Removed nested Card, enhanced background with gradient */}
             <div className="p-4 bg-linear-to-br from-purple-50 to-purple-100/50 border border-purple-200 rounded-xl shadow-sm">
-              {/* CHANGED: Added "This week's focus" badge and better layout */}
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <div className="text-sm font-medium">Recommendations</div>
@@ -318,45 +293,27 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
                 </span>
               </div>
 
-              {/* CHANGED: From simple list to interactive card-based layout */}
               <div className="space-y-3">
                 {enhancedRecommendations.map((rec) => {
-                  const isCompleted = completedRecs.has(rec.id);
                   const isExpanded = expandedRecId === rec.id;
 
                   return (
                     <div
                       key={rec.id}
-                      className={`bg-white rounded-xl p-4 border transition-all ${
-                        isCompleted
-                          ? "border-purple-200 bg-purple-50/30" // ADDED: Completed state styling
-                          : "border-gray-200 hover:border-purple-300 hover:shadow-md" // ADDED: Hover effects
-                      }`}
+                      className={`bg-white rounded-xl p-4 border transition-all border-gray-200 hover:border-purple-300 hover:shadow-md`}
                     >
                       <div className="flex items-start gap-3">
-                        {/* ADDED: Interactive checkbox */}
-                        <Checkbox
-                          checked={isCompleted}
-                          onCheckedChange={() => toggleComplete(rec.id)}
-                          className="mt-1"
-                        />
-
                         <div className="flex-1 min-w-0">
                           <div className="flex items-start gap-3">
-                            {/* ADDED: Icon for each recommendation */}
-                            <div className={`p-2 rounded-lg ${
-                              isCompleted ? "bg-purple-100 text-purple-400" : "bg-purple-100 text-purple-600"
-                            }`}>
+                            <div className={`p-2 rounded-lg bg-purple-100 text-purple-600`}>
                               {rec.icon}
                             </div>
 
                             <div className="flex-1">
                               <div className="flex items-start justify-between gap-2 mb-2">
-                                {/* CHANGED: Added line-through for completed items */}
-                                <p className={`text-sm ${isCompleted ? "line-through text-gray-400" : "text-gray-700"}`}>
+                                <p className="text-sm text-gray-700">
                                   {rec.text}
                                 </p>
-                                {/* ADDED: Priority badge */}
                                 <Badge
                                   variant="outline"
                                   className={`text-xs shrink-0 ${getPriorityColor(rec.priority)}`}
@@ -366,30 +323,29 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
                               </div>
 
                               <div className="flex items-center justify-between">
-                                {/* ADDED: Link to driver data */}
                                 <span className="text-xs text-purple-600">
                                   Based on {rec.linkedDriver}
                                 </span>
 
-                                {/* ADDED: Expandable tips button */}
-                                <button
-                                  onClick={() => toggleExpand(rec.id)}
-                                  className="flex items-center gap-1 text-xs text-gray-500 hover:text-purple-600 transition-colors"
-                                >
-                                  {isExpanded ? (
-                                    <>
-                                      Less <ChevronUp className="w-3 h-3" />
-                                    </>
-                                  ) : (
-                                    <>
-                                      More tips <ChevronDown className="w-3 h-3" />
-                                    </>
-                                  )}
-                                </button>
+                                {!!rec.expandedTips.length && (
+                                  <button
+                                    onClick={() => toggleExpand(rec.id)}
+                                    className="flex items-center gap-1 text-xs text-gray-500 hover:text-purple-600 transition-colors"
+                                  >
+                                    {isExpanded ? (
+                                      <>
+                                        Less <ChevronUp className="w-3 h-3" />
+                                      </>
+                                    ) : (
+                                      <>
+                                        More tips <ChevronDown className="w-3 h-3" />
+                                      </>
+                                    )}
+                                  </button>
+                                )}
                               </div>
 
-                              {/* ADDED: Expandable tips section */}
-                              {isExpanded && (
+                              {isExpanded && rec.expandedTips.length > 0 && (
                                 <div className="mt-3 pt-3 border-t border-gray-200">
                                   <p className="text-xs text-gray-600 mb-2">Tips to help you succeed:</p>
                                   <ul className="text-xs text-gray-600 space-y-1 ml-4">
@@ -408,17 +364,7 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
                 })}
               </div>
 
-              {/* ADDED: Progress tracker */}
-              {enhancedRecommendations.length > 0 && (
-                <div className="mt-4 text-center">
-                  <p className="text-xs text-gray-600">
-                    {completedRecs.size === enhancedRecommendations.length
-                      ? "🎉 All recommendations completed!"
-                      : `Complete ${enhancedRecommendations.length - completedRecs.size} more to improve your wellness score`
-                    }
-                  </p>
-                </div>
-              )}
+              {/* Note: progress/completion UI removed — recommendations are now informational only */}
             </div>
           </div>
         )}
