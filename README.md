@@ -3,6 +3,9 @@
 
 [Open application](https://junction2025-bice.vercel.app/)
 
+> **Note:** The live application showcases AuraSense's capabilities using a curated dataset of pre-uploaded scenarios. To demonstrate the full range of prediction patterns and explanations, the interface presents a rotating carousel of different risk states that automatically cycles every ~10 seconds. This allows visitors to experience how the AI agent responds to various combinations of triggers and personal patterns without requiring manual data input.
+
+> For the best experience install app from Safari share -> add to home screen or use Chrome on Andorid
 
 ## AuraSense — Personal AI Agent for Migraine Prediction
 
