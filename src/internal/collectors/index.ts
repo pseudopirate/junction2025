@@ -1,28 +1,7 @@
-import { storage } from "../storage";
+import { type AccelerometerData, type GeoPosition, storage } from "../storage";
 import { data as csvData } from "./mock.data";
 
 
-
-interface GeoPosition {
-    accuracy: number
-    latitude: number
-    longitude: number
-    altitude: number | null
-    altitudeAccuracy: number | null
-    heading: number | null
-    speed: number | null
-    timestamp: number
-}
-
-interface AccelerometerData {
-    x: number | null
-    y: number | null
-    z: number | null
-    alpha: number | null,
-    beta: number | null
-    gamma: number | null
-    interval: number | null
-}
 export async function ensurePermissions() {
     const perms: Record<string, string> = {}
     // Check geolocation permission
