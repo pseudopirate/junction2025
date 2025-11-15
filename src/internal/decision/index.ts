@@ -176,42 +176,42 @@ function generateExplanation(
         if (feature.label === 'sleep_hours') {
             if (feature.value <= feature.threshold) {
                 isProblematic = true;
-                reason = `You're getting only ${feature.value.toFixed(1)} hours of sleep, which is below the threshold of ${feature.threshold.toFixed(1)} hours`;
+                reason = `You're getting only ${feature.value.toFixed(1)} hours of sleep, below the recommended ${feature.threshold.toFixed(1)} hours`;
             }
         }
         // Screen time - higher is worse
         else if (feature.label === 'screen_time_hours') {
             if (feature.value > feature.threshold) {
                 isProblematic = true;
-                reason = `Your screen time is ${feature.value.toFixed(1)} hours, exceeding the threshold of ${feature.threshold.toFixed(1)} hours`;
+                reason = `Your screen time is ${feature.value.toFixed(1)} hours, above the recommended ${feature.threshold.toFixed(1)} hours`;
             }
         }
         // Prodrome symptoms - higher is worse
         else if (feature.label === 'prodrome_symptoms') {
             if (feature.value > feature.threshold) {
                 isProblematic = true;
-                reason = `You're experiencing prodrome symptoms (${feature.value > 0.5 ? 'yes' : 'no'})`;
+                reason = `You're experiencing prodrome symptoms`;
             }
         }
         // Stress level - higher is worse
         else if (feature.label === 'stress_level') {
             if (feature.value > feature.threshold) {
                 isProblematic = true;
-                reason = `Your stress level is elevated (${feature.value > 0.5 ? 'high' : 'low'})`;
+                reason = `Your stress level appears elevated`;
             }
         }
         // Attacks - higher is worse
         else if (feature.label === 'attacks_last_7_days' || feature.label === 'attacks_last_30_days') {
             if (feature.value > feature.threshold) {
                 isProblematic = true;
-                reason = `You've had ${feature.value} ${feature.label.includes('7') ? 'recent' : ''} attacks, which is above the threshold`;
+                reason = `You've had ${feature.value} ${feature.label.includes('7') ? 'recent' : ''} attacks`;
             }
         }
         // Days since last attack - lower is worse
         else if (feature.label === 'days_since_last_attack') {
             if (feature.value <= feature.threshold) {
                 isProblematic = true;
-                reason = `It's been only ${feature.value} days since your last attack`;
+                reason = `It has been ${feature.value} days since your last attack`;
             }
         }
         // Hydration - higher is worse (hydration_low means low hydration)
@@ -228,9 +228,9 @@ function generateExplanation(
             // Add trend information if available
             if (trend && Math.abs(trend.changePercent) > 10) {
                 if (trend.trend === 'increasing' && (feature.label === 'screen_time_hours' || feature.label === 'stress_level' || feature.label === 'prodrome_symptoms')) {
-                    keyFactors.push(`Your ${featureName} has increased by ${Math.abs(trend.changePercent).toFixed(1)}% compared to recent averages`);
+                    keyFactors.push(`Your ${featureName} has increased compared to recent averages`);
                 } else if (trend.trend === 'decreasing' && feature.label === 'sleep_hours') {
-                    keyFactors.push(`Your ${featureName} has decreased by ${Math.abs(trend.changePercent).toFixed(1)}% compared to recent averages`);
+                    keyFactors.push(`Your ${featureName} has decreased compared to recent averages`);
                 }
             }
         }
@@ -262,10 +262,10 @@ function generateExplanation(
 
     // Generate summary
     const riskLevel = score >= 0.7 ? 'high' : score >= 0.4 ? 'moderate' : 'low';
-    let summary = `Your migraine risk is ${riskLevel} (${(score * 100).toFixed(1)}%). `;
+    let summary = `Your migraine risk is ${riskLevel}. `;
     
     if (keyFactors.length > 0) {
-        summary += `The main contributing factors are: ${keyFactors.slice(0, 3).join(', ')}.`;
+        summary += `Main contributing factors: ${keyFactors.slice(0, 3).join(', ')}.`;
     } else {
         summary += `Your current metrics are within normal ranges.`;
     }
