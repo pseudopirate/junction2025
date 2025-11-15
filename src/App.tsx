@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import InstallPrompt from './components/InstallPrompt'
 import './App.css'
 
 function App() {
@@ -18,9 +19,10 @@ function App() {
           </p>
         </div>
         <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
+          This app is installable on Android and iOS devices
         </p>
       </header>
+      <InstallPrompt />
     </div>
   )
 }

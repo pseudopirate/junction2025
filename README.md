@@ -74,13 +74,47 @@ This app includes:
 - Web app manifest
 - Auto-update capability
 - Installable on mobile devices and desktop
+- Install prompt component for better UX
+
+## Mobile Installation
+
+### Android/Chrome
+
+1. Open the app in Chrome browser
+2. Look for the install prompt that appears automatically, or
+3. Tap the menu (three dots) → "Install app" or "Add to Home screen"
+4. Confirm installation
+
+### iOS/Safari
+
+1. Open the app in Safari browser
+2. Tap the Share button (square with arrow)
+3. Scroll down and tap "Add to Home Screen"
+4. Customize the name if desired
+5. Tap "Add" to confirm
+
+The app will appear on your home screen and can be launched like a native app.
+
+## PWA Icons
+
+For the best installation experience, add the following icon files to the `public` folder:
+
+- `pwa-64x64.png` (64x64 pixels)
+- `pwa-192x192.png` (192x192 pixels)
+- `pwa-512x512.png` (512x512 pixels)
+- `maskable-icon-512x512.png` (512x512 pixels, maskable - safe zone: 80% center)
+- `apple-touch-icon.png` (180x180 pixels for iOS)
+
+If icons are not provided, the PWA plugin will generate placeholder icons during build, but it's recommended to add your own branded icons.
 
 ## Project Structure
 
 ```
 junction2025/
-├── public/          # Static assets
+├── public/          # Static assets (icons go here)
 ├── src/
+│   ├── components/  # React components
+│   │   └── InstallPrompt.tsx  # Install prompt component
 │   ├── App.tsx      # Main app component
 │   ├── App.css      # App styles
 │   ├── main.tsx     # Entry point

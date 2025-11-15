@@ -1,0 +1,120 @@
+.install-prompt {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 400px;
+  width: calc(100% - 40px);
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateX(-50%) translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+.install-prompt-content {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e0e0e0;
+}
+
+.install-prompt-content h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.install-prompt-content p {
+  margin: 0 0 16px 0;
+  color: #666;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+.install-prompt-content ol {
+  margin: 0 0 16px 0;
+  padding-left: 20px;
+  text-align: left;
+  color: #666;
+}
+
+.install-prompt-content li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.ios-icon {
+  font-size: 1.2em;
+  vertical-align: middle;
+}
+
+.install-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.install-button,
+.dismiss-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.install-button {
+  background-color: #646cff;
+  color: white;
+}
+
+.install-button:hover {
+  background-color: #535bf2;
+}
+
+.dismiss-button {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.dismiss-button:hover {
+  background-color: #e0e0e0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .install-prompt-content {
+    background: #1a1a1a;
+    border-color: #333;
+  }
+
+  .install-prompt-content h3 {
+    color: #fff;
+  }
+
+  .install-prompt-content p,
+  .install-prompt-content li {
+    color: #ccc;
+  }
+
+  .dismiss-button {
+    background-color: #333;
+    color: #fff;
+  }
+
+  .dismiss-button:hover {
+    background-color: #444;
+  }
+}
+
