@@ -201,6 +201,9 @@ export function Onboarding({ onComplete }: OnboardingProps) {
               size="lg"
               className="w-full h-14 text-base font-medium"
               onClick={async () => {
+                // if ("Notification" in window && 'permissions' in navigator) {
+                //   await navigator.permissions.request({ name: 'notifications' as PermissionName });
+                // }
                 await handleEnableAllPermissions();
                 handleContinue();
               }}

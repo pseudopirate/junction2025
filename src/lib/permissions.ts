@@ -5,7 +5,7 @@
 
 export type PermissionType =
   | 'notifications'
-  | 'location'
+  | 'geolocation'
   | 'motion' // For activity tracking
   | 'camera' // For logging symptoms
   | 'calendar' // For schedule/stress patterns
@@ -36,12 +36,12 @@ export const PERMISSION_CONFIGS: Record<PermissionType, PermissionConfig> = {
     isRequired: true,
     icon: 'Bell',
   },
-  location: {
-    type: 'location',
-    title: 'Weather & Environment',
-    description: 'Track weather and barometric pressure changes',
-    benefit: 'Identify environmental triggers like pressure changes',
-    isRequired: false,
+  geolocation: {
+    type: 'geolocation',
+    title: 'Geolocation',
+    description: 'Track location changes and fast movement',
+    benefit: 'Identify location and climate and fast movement triggers',
+    isRequired: true,
     icon: 'MapPin',
   },
   motion: {

@@ -72,7 +72,7 @@ export const PermissionsProvider: FC<{ children?: ReactNode }> = ({ children }) 
         case 'notifications':
           result = await requestNotificationPermission();
           break;
-        case 'location':
+        case 'geolocation':
           result = await requestLocationPermission();
           break;
         case 'motion':
