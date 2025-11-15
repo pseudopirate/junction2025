@@ -1,4 +1,4 @@
-import { storage } from "../storage";
+// import { storage } from "../storage";
 
 export async function ensurePermissions() {
     const perms: Record<string, string> = {}
@@ -12,16 +12,6 @@ export async function ensurePermissions() {
       }
     }
 
-    // Check camera permission
-    if ('permissions' in navigator) {
-      try {
-        const cameraStatus = await navigator.permissions.query({ name: 'camera' as PermissionName })
-        perms.camera = cameraStatus.state
-      } catch (e) {
-        perms.camera = 'unknown'
-      }
-    }
-
     // Check notifications permission
     if ('Notification' in window && 'permissions' in navigator) {
       try {
@@ -32,13 +22,14 @@ export async function ensurePermissions() {
       }
     }
 
-    await storage.upsert('permissions', perms, 'permissions')
+    // await storage.upsert('permissions', perms, 'permissions')
 }
 
 async function initGeo() {
     navigator.geolocation.watchPosition(
         (position) => {
-            storage.create('geolocation', position, 'geolocation')
+            console.log(position)
+            // storage.create('geolocation', position, 'geolocation')
         },
         (error) => {
             console.error(error)
@@ -58,13 +49,13 @@ async function fetchWeather(lat: number, lon: number) {
     if (!response.ok) throw new Error('Weather API error')
     
     const data = await response.json()
-    await storage.upsert('weather', data, 'weather');
+    // await storage.upsert('weather', data, 'weather');
 }
 
 async function initWeather() {
     setInterval(async () => {
-        const geo = await storage.read('geolocation', 'geolocation');
-        console.log(geo)
+        // const geo = await storage.read('geolocation', 'geolocation');
+        // console.log(geo)
     }, 1000); // 5 min
 }
 
