@@ -260,7 +260,7 @@ export function PermissionsSettings() {
                         <div className="text-warning text-sm">
                           <div className="font-medium mb-1">Permission Blocked</div>
                           <p className="text-warning/80">
-                            To enable this, please go to your device Settings → Safari → MigrainePredict and allow access.
+                            To enable this, please go to your device Settings → Safari → AuraSense and allow access.
                           </p>
                         </div>
                       </div>

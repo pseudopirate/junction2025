@@ -1,6 +1,7 @@
 import { AlertTriangle, CheckCircle2, AlertCircle } from "lucide-react";
 import { Card } from "./ui/card";
 
+
 export type Trend = {
   feature: string;
   current: number;
@@ -53,6 +54,9 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
       <div className={`absolute inset-0 opacity-5 ${status.gradient}`} />
 
       <div className="relative">
+
+
+
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3>Migraine Risk</h3>

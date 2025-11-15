@@ -111,7 +111,7 @@ function AppContent() {
                 <Brain className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg">MigrainePredict</h2>
+                <h2 className="text-lg">AuraSense</h2>
               </div>
             </div>
 
@@ -119,7 +119,9 @@ function AppContent() {
               variant="ghost"
               size="icon"
               className="rounded-full"
-              onClick={() => setActiveTab("settings")}
+              onClick={() => {}}
+              aria-disabled="true"
+              tabIndex={-1}
             >
               <Settings className="w-5 h-5" />
             </Button>
@@ -132,7 +134,13 @@ function AppContent() {
         {/* Home View */}
         {activeTab === "home" && (
           <div className="space-y-6">
-            {/* Prominent Log Migraine card placed above the risk meter so it's easy to spot on mobile */}
+
+
+            <RiskMeter
+              riskLevel={riskScorePercent ?? 35}
+              predictionMeta={predictionMeta as PredictionMeta}
+            />
+
             <MigraineLogDialog>
               <div className="p-4 rounded-2xl gradient-primary text-white shadow-lg w-full flex items-center justify-between">
                 <div className="flex flex-col">
@@ -154,11 +162,6 @@ function AppContent() {
                 </div>
               </div>
             </MigraineLogDialog>
-
-            <RiskMeter
-              riskLevel={riskScorePercent ?? 35}
-              predictionMeta={predictionMeta as PredictionMeta}
-            />
 
             <PredictionTimeline />
 

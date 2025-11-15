@@ -112,7 +112,8 @@ export function TriggerInsights() {
 
                 <TrendingUp
                   className={`w-5 h-5 shrink-0 ${
-                    trigger.trend === "up" ? "text-destructive rotate-0" : "text-success rotate-180"
+                    // Always show the arrow pointing to the right; color indicates direction.
+                    trigger.trend === "up" ? "text-destructive rotate-0" : "text-success rotate-0"
                   }`}
                 />
               </div>
