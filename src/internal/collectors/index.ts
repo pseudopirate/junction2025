@@ -115,7 +115,6 @@ async function initUserData(): Promise<Record<string, string | number>[]> {
 }
 
 async function initWeather() {
-    fetchWeather();
     setInterval(async () => {
         fetchWeather();
     }, 1000 * 60 * 5); // 5 min

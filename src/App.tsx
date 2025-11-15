@@ -17,6 +17,16 @@ import { storage, type GeneralData } from "./internal/storage";
 import { initListeners } from "./internal/collectors";
 import MigraineLogDialog from "./components/MigraineLogDialog";
 
+const sleep = async (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+const dates = [
+  '2025-10-30',
+  '2025-10-19',
+  '2025-10-20',
+  '2025-10-12',
+  '2025-10-14',
+].map((t) => new Date(t).getTime());
+
 function AppContent() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [activeTab, setActiveTab] = useState("home");
@@ -42,22 +52,23 @@ function AppContent() {
   useEffect(() => {
     let mounted = true;
     async function initAndPredict() {
-      try {
-        // Ensure the collectors (including mock CSV parsing) have finished.
-        await initListeners();
+      // Ensure the collectors (including mock CSV parsing) have finished.
+      await initListeners();
 
-        const data = await storage.readAllData<GeneralData>('general');
-        if (!data || data.length === 0) return;
-        // Use the latest entry (last in array) as the sample for prediction.
-        const latest = data[data.length - 1];
-        const result = await predictMigraneRisk(latest);
-        if (!mounted) return;
-        const rawScore = result.score ?? 0;
-        const scorePercent = Math.round(rawScore * 100);
-        setRiskScorePercent(scorePercent);
-        setPredictionMeta(result.meta ?? null);
-      } catch (e) {
-        console.error('Failed to initialize collectors or run prediction', e);
+      const data = await Promise.all(dates.map((t) => storage.readData<GeneralData>(t, 'general')));
+      if (!mounted) return;
+      
+      let i = 0;
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const item = data[i]!;
+        const result = await predictMigraneRisk(item);
+        setRiskScorePercent(Math.round(result.score * 100));
+        setPredictionMeta(result.meta);
+        i++;
+        
+        if (i >= data.length) i = 0
+        await sleep(10000);
       }
     }
     initAndPredict();

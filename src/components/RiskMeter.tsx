@@ -92,14 +92,14 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
 
             {/* Center content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <div className={`text-6xl mb-2 ${status.color}`}>{riskLevel}%</div>
+              <div className={`text-6xl mb-2 ${status.color}`}>{riskLevel}</div>
               <div className="text-muted-foreground">Risk Level</div>
             </div>
           </div>
         </div>
 
         {/* Status */}
-        <div className="text-center">
+        {status.label !== 'Low Risk' && <div className="text-center">
           <div className={`inline-flex items-center gap-2 px-6 py-3 rounded-full ${status.gradient} text-white mb-3`}>
             <div className="w-2 h-2 bg-white rounded-full animate-pulse-slow" />
             <span>{status.label}</span>
@@ -122,7 +122,7 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
               </ul>
             </div>
           )}
-        </div>
+        </div>}
       </div>
     </Card>
   );
