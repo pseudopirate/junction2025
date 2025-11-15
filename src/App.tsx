@@ -12,6 +12,9 @@ import { PermissionsSettings } from "./components/PermissionsSettings";
 import { PermissionsProvider } from "./hooks/usePermissions";
 import { isOnboardingComplete } from "./lib/permissions";
 import { Button } from "./components/ui/button";
+import { predictMigraneRisk } from "./internal/decision";
+import { storage, type GeneralData } from "./internal/storage";
+import { initListeners } from "./internal/collectors";
 
 function AppContent() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -19,11 +22,41 @@ function AppContent() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Prediction state
+  const [riskScore, setRiskScore] = useState<number | null>(null);
+  const [predictionMeta, setPredictionMeta] = useState<string | null>(null);
+
   useEffect(() => {
     // Check if onboarding is complete
     const onboardingDone = isOnboardingComplete();
     setShowOnboarding(!onboardingDone);
     setIsLoading(false);
+  }, []);
+
+  // Wait for collectors to initialize (parses mock CSV into the 'general' store),
+  // then load latest mock/general data and run prediction.
+  useEffect(() => {
+    let mounted = true;
+    async function initAndPredict() {
+      try {
+        // Ensure the collectors (including mock CSV parsing) have finished.
+        await initListeners();
+
+        const data = await storage.readAllData<GeneralData>('general');
+        if (!data || data.length === 0) return;
+        // Use the latest entry (last in array) as the sample for prediction.
+        const latest = data[data.length - 1];
+        const result = await predictMigraneRisk(latest);
+        if (!mounted) return;
+        const scorePercent = Math.round((result.score ?? 0) * 100);
+        setRiskScore(scorePercent);
+        setPredictionMeta(result.meta?.explanation ?? null);
+      } catch (e) {
+        console.error('Failed to initialize collectors or run prediction', e);
+      }
+    }
+    initAndPredict();
+    return () => { mounted = false; };
   }, []);
 
   const handleOnboardingComplete = () => {
@@ -79,8 +112,8 @@ function AppContent() {
         {activeTab === "home" && (
           <div className="space-y-6">
             <RiskMeter
-              riskLevel={35}
-              nextPrediction="Peak risk expected around 9am tomorrow"
+              riskLevel={riskScore ?? 35}
+              nextPrediction={predictionMeta ?? "Peak risk expected around 9am tomorrow"}
             />
 
             <PredictionTimeline />
