@@ -7,8 +7,8 @@
 - [x] Feed context from database (Igor)
 - [ ] Decision maker: calls model, gets score and makes prediction (Aarni)
 - [ ] Explanaitions based on score (Aarni)
-- [ ] Come up with scenario (Slava)
-- [ ] Make presentation (Slava)
-- [ ] Create video
-- [ ] Fill hackathon.app
-- [ ] SUBMIT!
+- [X] Come up with scenario (Slava)
+- [X] Make presentation (Slava)
+- [ ] Create video (Slava)
+- [ ] Fill hackathon.app (Igor)
+- [ ] SUBMIT! (Igor)
