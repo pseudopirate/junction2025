@@ -7,7 +7,6 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -145,7 +144,7 @@ export function MigraineLogDialog({
 
         const migraine_sessions_count = sameDaySessions.length;
         const migraine_sessions_total_minutes = sameDaySessions.reduce((sum, s) => {
-          const v = typeof (s as any).durationMinutes === 'number' ? (s as any).durationMinutes : 0;
+          const v = typeof s.durationMinutes === 'number' ? s.durationMinutes : 0;
           return sum + v;
         }, 0);
         const migraine_sessions_avg_minutes = migraine_sessions_count > 0
@@ -160,7 +159,7 @@ export function MigraineLogDialog({
             return new Date(prev.date).getTime() > new Date(curr.date).getTime() ? prev : curr;
           });
           last_migraine_time = last.date;
-          last_migraine_duration_minutes = (last as any).durationMinutes || 0;
+          last_migraine_duration_minutes = last.durationMinutes || 0;
         }
 
         // Build a general record with the fields expected by mock.data.ts.
@@ -280,11 +279,9 @@ export function MigraineLogDialog({
         )}
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline" disabled={isSaving || showSuccess} onClick={() => { setOpen(false); resetFields(); }}>
-              Cancel
-            </Button>
-          </DialogClose>
+          <Button variant="outline" disabled={isSaving || showSuccess} onClick={() => { setOpen(false); resetFields(); }}>
+            Cancel
+          </Button>
 
           <Button onClick={handleSubmit} disabled={isSaving || showSuccess}>
             {isSaving ? (

@@ -15,7 +15,7 @@ import { Button } from "./components/ui/button";
 import { predictMigraneRisk } from "./internal/decision";
 import { storage, type GeneralData } from "./internal/storage";
 import { initListeners } from "./internal/collectors";
-import MigraineLogDialog from "./components/MigraineLogDialog";
+
 
 function AppContent() {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -95,7 +95,7 @@ function AppContent() {
                 <Brain className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg">MigrainePredict</h2>
+                <h2 className="text-lg">AuraSense</h2>
               </div>
             </div>
 
@@ -103,7 +103,9 @@ function AppContent() {
               variant="ghost"
               size="icon"
               className="rounded-full"
-              onClick={() => setActiveTab("settings")}
+              onClick={() => {}}
+              aria-disabled="true"
+              tabIndex={-1}
             >
               <Settings className="w-5 h-5" />
             </Button>
@@ -116,28 +118,7 @@ function AppContent() {
         {/* Home View */}
         {activeTab === "home" && (
           <div className="space-y-6">
-            {/* Prominent Log Migraine card placed above the risk meter so it's easy to spot on mobile */}
-            <MigraineLogDialog>
-              <div className="p-4 rounded-2xl gradient-primary text-white shadow-lg w-full flex items-center justify-between">
-                <div className="flex flex-col">
-                  <span className="font-semibold">Log Migraine</span>
-                  <span className="text-sm text-white/90">Quickly record an attack</span>
-                </div>
 
-                {/* Animated attention icon: uses app's slow pulse animation */}
-                <div className="ml-4 flex items-center">
-                  <div className="relative w-10 h-10 flex items-center justify-center">
-                    <div className="absolute inset-0 rounded-full bg-white/10 animate-pulse-slow" />
-                    <div className="relative z-10 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-                      {/* simple plus icon (white) */}
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-5 h-5 text-white" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v14M5 12h14" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </MigraineLogDialog>
 
             <RiskMeter
               riskLevel={riskScorePercent ?? 35}

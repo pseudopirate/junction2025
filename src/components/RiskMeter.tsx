@@ -1,5 +1,6 @@
 import { AlertTriangle, CheckCircle2, AlertCircle } from "lucide-react";
 import { Card } from "./ui/card";
+import MigraineLogDialog from "./MigraineLogDialog";
 
 export type Trend = {
   feature: string;
@@ -53,6 +54,31 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
       <div className={`absolute inset-0 opacity-5 ${status.gradient}`} />
 
       <div className="relative">
+        {/* Log Migraine widget placed at the top inside the card (in-flow) */}
+        <div className="mb-4">
+          <MigraineLogDialog>
+            <div className="p-4 rounded-2xl gradient-primary text-white shadow-lg w-full flex items-center justify-between">
+              <div className="flex flex-col">
+                <span className="font-semibold">Log Migraine</span>
+                <span className="text-sm text-white/90">Quickly record an attack</span>
+              </div>
+
+              {/* Animated attention icon: uses app's slow pulse animation */}
+              <div className="ml-4 flex items-center">
+                <div className="relative w-10 h-10 flex items-center justify-center">
+                  <div className="absolute inset-0 rounded-full bg-white/10 animate-pulse-slow" />
+                  <div className="relative z-10 w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                    {/* simple plus icon (white) */}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-5 h-5 text-white" aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v14M5 12h14" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </MigraineLogDialog>
+        </div>
+
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3>Migraine Risk</h3>

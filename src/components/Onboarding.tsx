@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, CSSProperties } from "react";
 import { Brain, Bell, CheckCircle2, ChevronRight, Sparkles, Shield, Zap, Activity } from 'lucide-react';
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
@@ -55,7 +55,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
             {/* Welcome Text */}
             <div className="text-center space-y-4">
-              <h1 className="text-3xl font-bold text-balance">Welcome to MigrainePredict</h1>
+              <h1 className="text-3xl font-bold text-balance">Welcome to AuraSense</h1>
               <p className="text-muted-foreground text-lg">
                 Take control of your migraines with AI-powered predictions
               </p>
@@ -142,10 +142,10 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           {/* Scrollable area with momentum scrolling on iOS and reserved bottom space so footer doesn't overlap */}
           <div
             className="h-full overflow-y-auto space-y-6 pr-2"
-            style={{ WebkitOverflowScrolling: 'touch' as any, paddingBottom: 'calc(env(safe-area-inset-bottom) + 92px)' }}
+            style={{ WebkitOverflowScrolling: 'touch', paddingBottom: 'calc(env(safe-area-inset-bottom) + 92px)' } as CSSProperties}
           >
             {/* Single Permission Card */}
-            <Card className="p-6 border-primary/20 bg-gradient-to-br from-primary/5 to-primary/2">
+            <Card className="p-6 border-primary/20 bg-linear-to-br from-primary/5 to-primary/2">
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
                   <div className={`p-3 rounded-lg shrink-0 ${
@@ -235,7 +235,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-balance">You're All Set!</h2>
           <p className="text-muted-foreground text-lg">
-            MigrainePredict is learning your patterns. Check back in 24 hours for your first prediction.
+            AuraSense is learning your patterns. Check back in 24 hours for your first prediction.
           </p>
         </div>
 
