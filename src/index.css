@@ -238,14 +238,65 @@
   transform: scale(0.98);
 }
 
-/* Gradient backgrounds for health app */
+/* ========================================
+   GRADIENT BACKGROUNDS FOR LOG MIGRAINE CARD
+   ======================================== */
+
+/* OPTION 1 (ACTIVE): Vibrant Purple to Blue - Enhanced saturation for more pop */
 .gradient-primary {
   background: linear-gradient(
     135deg,
-    oklch(0.55 0.25 290) 0%,
-    oklch(0.6 0.2 250) 100%
+    oklch(0.6 0.28 290) 0%,
+    oklch(0.65 0.22 250) 100%
   );
 }
+
+/* Alternative options - comment out Option 1 above and uncomment one below: */
+
+/* OPTION 2: Energetic Purple to Pink - Warm and friendly */
+/* .gradient-primary {
+  background: linear-gradient(
+    135deg,
+    oklch(0.65 0.27 310) 0%,
+    oklch(0.7 0.24 350) 100%
+  );
+} */
+
+/* OPTION 3: Teal to Purple - Modern and fresh, great contrast */
+/* .gradient-primary {
+  background: linear-gradient(
+    135deg,
+    oklch(0.65 0.18 200) 0%,
+    oklch(0.6 0.25 290) 100%
+  );
+} */
+
+/* OPTION 4: Coral to Pink - Energetic and attention-grabbing */
+/* .gradient-primary {
+  background: linear-gradient(
+    135deg,
+    oklch(0.7 0.18 40) 0%,
+    oklch(0.7 0.22 350) 100%
+  );
+} */
+
+/* OPTION 5: Deep Blue to Cyan - Professional and calming */
+/* .gradient-primary {
+  background: linear-gradient(
+    135deg,
+    oklch(0.55 0.22 250) 0%,
+    oklch(0.65 0.18 200) 100%
+  );
+} */
+
+/* OPTION 6: Vivid Magenta to Orange - Bold and energetic */
+/* .gradient-primary {
+  background: linear-gradient(
+    135deg,
+    oklch(0.65 0.28 330) 0%,
+    oklch(0.7 0.2 50) 100%
+  );
+} */
 
 .gradient-risk-low {
   background: linear-gradient(
