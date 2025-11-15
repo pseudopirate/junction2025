@@ -214,7 +214,6 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
   const featuresSource = predictionMeta?.features ?? [];
 
   const topDrivers = computeTopDrivers(featuresSource, trendsSource);
-  console.log('topDrivers', topDrivers);
 
   const humanLabel = (label: string) => HUMAN_LABELS[label] ?? label.replace(/_/g, " ");
 

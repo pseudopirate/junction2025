@@ -56,7 +56,11 @@ function AppContent() {
     if (!("Notification" in window) || !('permissions' in navigator)) return;
 
     const notifStatus = await navigator.permissions.query({ name: 'notifications' as PermissionName });
-    if (notifStatus.state !== 'granted') return;
+
+    if (notifStatus.state !== 'granted') {
+      const status = await Notification.requestPermission();
+      if (status !== 'granted') return;
+    }
 
     const notification = new Notification("Migraine chance is high", {
       body: `Your have a high chance of migraine. Consider taking preventive measures.`,
