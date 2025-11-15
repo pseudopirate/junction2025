@@ -267,12 +267,6 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
             <div className="w-2 h-2 bg-white rounded-full animate-pulse-slow" />
             <span>{status.label}</span>
           </div>
-
-          {(predictionMeta?.detailedExplanation?.summary ?? predictionMeta?.explanation) && (
-            <p className="text-muted-foreground mt-4">
-              {predictionMeta?.detailedExplanation?.summary ?? predictionMeta?.explanation}
-            </p>
-          )}
         </div>
 
         {/* Top drivers section */}
@@ -290,17 +284,10 @@ export function RiskMeter({ riskLevel, predictionMeta }: RiskMeterProps) {
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <div className="text-sm font-semibold truncate">{humanLabel(d.label)}</div>
-                        {d.trend && (
-                          <div className="text-xs text-muted-foreground">· {d.trend.trend} ({d.trend.changePercent}%)</div>
-                        )}
                       </div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {d.label === "sleep_hours"
-                          ? `You're sleeping ${d.current.toFixed(1)} h (target ≥ ${d.threshold.toFixed(1)} h)`
-                          : d.label === "screen_time_hours"
-                            ? `Screen time ${d.current.toFixed(1)} h (target ${d.threshold.toFixed(1)} h)`
-                            : `${d.current} vs ${d.threshold}`}
-                      </div>
+                      {d.trend && (
+                        <div className="text-xs text-muted-foreground mt-1 font-medium">{d.trend.trend}</div>
+                      )}
                     </div>
 
                     <div className="w-28">
