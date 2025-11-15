@@ -20,11 +20,16 @@ import MigraineLogDialog from "./components/MigraineLogDialog";
 const sleep = async (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const dates = [
-  '2025-10-30',
-  '2025-10-19',
-  '2025-10-20',
-  '2025-10-12',
-  '2025-10-14',
+  // '2025-10-30',
+  // '2025-10-19',
+  // '2025-10-20',
+  // '2025-10-12',
+  // '2025-10-14',
+  '2025-11-02',
+  '2025-11-03',
+  '2025-11-04',
+  '2025-11-05',
+  '2025-11-06',
 ].map((t) => new Date(t).getTime());
 
 function AppContent() {
