@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Activity, BarChart3, History, Settings, Brain, Home } from "lucide-react";
 import { RiskMeter, PredictionMeta } from "./components/RiskMeter";
 import { PredictionTimeline } from "./components/PredictionTimeline";
@@ -43,14 +43,34 @@ function AppContent() {
   const [riskScorePercent, setRiskScorePercent] = useState<number | null>(null);
   const [predictionMeta, setPredictionMeta] = useState<PredictionMeta>(null);
 
-
-
   useEffect(() => {
     // Check if onboarding is complete
     const onboardingDone = isOnboardingComplete();
     setShowOnboarding(!onboardingDone);
     setIsLoading(false);
   }, []);
+
+  // Function to send browser notification
+  const sendNotification = useCallback(async (score: number) => {
+    if (!notificationsEnabled) return;
+    if (!("Notification" in window) || !('permissions' in navigator)) return;
+
+    const notifStatus = await navigator.permissions.query({ name: 'notifications' as PermissionName });
+    if (notifStatus.state !== 'granted') return;
+
+    const notification = new Notification("Migraine chance is high", {
+      body: `Your have a high chance of migraine. Consider taking preventive measures.`,
+      icon: "/favicon.ico", // You may want to add a custom icon
+      badge: "/favicon.ico",
+      tag: `${score}-risk-alert`, // Prevents duplicate notifications
+      requireInteraction: false,
+    });
+
+    // Auto-close notification after 5 seconds
+    setTimeout(() => {
+      notification.close();
+    }, 5000);
+  }, [notificationsEnabled]);
 
   // Wait for collectors to initialize (parses mock CSV into the 'general' store),
   // then load latest mock/general data and run prediction.
@@ -68,7 +88,13 @@ function AppContent() {
       while (true) {
         const item = data[i]!;
         const result = await predictMigraneRisk(item);
-        setRiskScorePercent(Math.round(result.score * 100));
+        const score = Math.round(result.score * 100);
+
+        if (score >= 70) {
+          sendNotification(score);
+        }
+
+        setRiskScorePercent(score);
         setPredictionMeta(result.meta);
         i++;
         
@@ -78,7 +104,7 @@ function AppContent() {
     }
     initAndPredict();
     return () => { mounted = false; };
-  }, []);
+  }, [sendNotification]);
 
   const handleOnboardingComplete = () => {
     setShowOnboarding(false);
