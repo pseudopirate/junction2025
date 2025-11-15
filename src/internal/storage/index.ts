@@ -37,6 +37,71 @@ export interface GeneralData {
   stress_level: number;
 }
 
+export interface CalendarData {
+  date: string; // ISO date string (YYYY-MM-DD)
+  eventCount: number;
+  totalDurationMinutes: number;
+  workloadScore: number; // 0-100 scale based on events and duration
+  events: Array<{
+    id: string;
+    summary: string;
+    start: string;
+    end: string;
+    durationMinutes: number;
+  }>;
+}
+
+export interface WearablesData {
+    date: string; // ISO date string (YYYY-MM-DD)
+    timestamp: number; // Unix timestamp in milliseconds
+    
+    // Heart rate data
+    heartRate?: {
+        bpm: number; // Beats per minute
+        restingBpm?: number; // Resting heart rate
+        maxBpm?: number; // Maximum heart rate during the day
+        hrv?: number; // Heart rate variability (ms)
+    };
+    
+    // Activity data
+    steps?: number; // Total steps for the day
+    distance?: number; // Distance in meters
+    calories?: number; // Calories burned
+    activeMinutes?: number; // Minutes of active exercise
+    
+    // Stress level
+    stressLevel?: number; // 0-100 scale
+    
+    // Sleep data
+    sleep?: {
+        durationHours: number; // Total sleep duration
+        quality: number; // 0-100 sleep quality score
+        deepSleepMinutes?: number; // Deep sleep duration
+        remSleepMinutes?: number; // REM sleep duration
+        lightSleepMinutes?: number; // Light sleep duration
+        awakeMinutes?: number; // Time awake during sleep
+        sleepStart?: string; // ISO timestamp when sleep started
+        sleepEnd?: string; // ISO timestamp when sleep ended
+    };
+    
+    // Workout data
+    workouts?: Array<{
+        type: string; // e.g., "running", "cycling", "walking", "strength"
+        durationMinutes: number;
+        calories?: number;
+        distance?: number; // in meters
+        averageHeartRate?: number;
+        maxHeartRate?: number;
+        startTime: string; // ISO timestamp
+        endTime?: string; // ISO timestamp
+    }>;
+    
+    // Additional metrics
+    oxygenSaturation?: number; // SpO2 percentage (0-100)
+    bodyTemperature?: number; // Body temperature in Celsius
+    respiratoryRate?: number; // Breaths per minute
+}
+
 type StoreName =
     | 'permissions'
     | 'geolocation'
@@ -45,7 +110,9 @@ type StoreName =
     | 'general'
     | 'accelerometer'
     | 'gyroscope'
-    | 'migraines';
+    | 'migraines'
+    | 'calendar'
+    | 'wearables';
 
 const DB_NAME = 'PWA_DATA_STORAGE'
 const DEFAULT_STORE_NAME = 'general'
