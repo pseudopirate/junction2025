@@ -108,15 +108,3 @@ Understands the user’s environment — calendar events, weather, routines — 
 Everything runs on-device. No data leaves the user’s phone. Privacy is absolute.
 
 AuraSense transforms migraine management from passive tracking into proactive personal guidance. It forecasts, explains, and acts — helping users stay one step ahead of their migraines with complete privacy and clarity.
-
-
-## TODO
-- [x] Integrate model (Igor)
-- [x] Feed context from database (Igor)
-- [ ] Decision maker: calls model, gets score and makes prediction (Aarni)
-- [ ] Explanaitions based on score (Aarni)
-- [X] Come up with scenario (Slava)
-- [X] Make presentation (Slava)
-- [ ] Create video (Slava)
-- [ ] Fill hackathon.app (Igor)
-- [ ] SUBMIT! (Igor)
