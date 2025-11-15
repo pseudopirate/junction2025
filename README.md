@@ -173,3 +173,14 @@ MIT
 - **Permission**: Required
 - **Browser Support**: Chrome/Edge (Android, Windows, Mac, Linux), not iOS Safari
 - **Use Cases**: Heart rate, step count, sleep data, workout metrics
+
+## TODO
+- [ ] Integrate model (Igor)
+- [ ] Feed context from database (Igor)
+- [ ] Decision maker: calls model, gets score and makes prediction (Aarni)
+- [ ] Explanaitions based on score (Aarni)
+- [ ] Come up with scenario (Slava)
+- [ ] Make presentation (Slava)
+- [ ] Create video
+- [ ] Fill hackathon.app
+- [ ] SUBMIT!
